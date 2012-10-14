@@ -49,4 +49,13 @@
         android:contentDescription="@string/loginBarcodeButton"
         android:src="@drawable/barcode" />
 
+    <TextView
+        android:id="@+id/connectionStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Connection status"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>
