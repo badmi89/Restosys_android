@@ -1,8 +1,18 @@
 <resources>
 
-    <string name="app_name">RestoSys_Android</string>
+    <string name="app_name">RestoSys</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_login">Login</string>
+    <string name="loginButton">Login</string>
+    <string name="loginBarcodeButton">Login using barcode reader</string>
+    <string name="title_activity_bills">Active bills</string>
+    <string name="comming_soon">Comming soon</string>
+    <string name="createNewBill">Create new bill</string>
+    <string name="billsLabel">Your bills</string>
+    <string name="settingsIcon">Settings</string>
+    <string name="logOffIcon">Log off</string>
+    <string name="printButton">Print</string>
+    <string name="deleteButton">Delete</string>
 
 </resources>

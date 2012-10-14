@@ -1,14 +1,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <TextView
+    android:layout_height="match_parent"
+    android:background="@drawable/bground"
+    android:tileMode="repeat" >
+    
+    <ImageView
+        android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world"
-        tools:context=".LoginActivity" />
+        android:layout_marginTop="50dp"
+        android:contentDescription="@string/app_name"
+        android:minHeight="150dp"
+        android:minWidth="150dp"
+        android:src="@drawable/restosys" />
+
+    <EditText
+        android:id="@+id/editTextLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="false"
+        android:layout_centerVertical="false"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="300dp"
+        android:ems="10"
+        android:inputType="textPassword" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextLogin"
+        android:layout_below="@+id/editTextLogin"
+        android:layout_toLeftOf="@+id/barcodeButton"
+        android:text="@string/loginButton" />
+
+    <ImageButton
+        android:id="@+id/barcodeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonLogin"
+        android:layout_alignRight="@+id/editTextLogin"
+        android:contentDescription="@string/loginBarcodeButton"
+        android:src="@drawable/barcode" />
 
 </RelativeLayout>
