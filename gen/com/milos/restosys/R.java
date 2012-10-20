@@ -27,7 +27,6 @@ public final class R {
         public static final int buttonLogin=0x7f07000c;
         public static final int checkBox1=0x7f070005;
         public static final int checkBox2=0x7f070006;
-        public static final int connectionStatusText=0x7f07000e;
         public static final int editTextLogin=0x7f07000b;
         public static final int imageView1=0x7f07000a;
         public static final int linearLayout1=0x7f070004;
@@ -37,6 +36,7 @@ public final class R {
         public static final int settingButton=0x7f070003;
         public static final int testNetworkButton=0x7f070007;
         public static final int textView1=0x7f070001;
+        public static final int toggleServiceButton=0x7f07000e;
     }
     public static final class layout {
         public static final int activity_bills=0x7f030000;
