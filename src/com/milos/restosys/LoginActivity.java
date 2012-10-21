@@ -2,7 +2,7 @@ package com.milos.restosys;
 
 import com.milos.restosys.preferences.LoginPreferences;
 import com.milos.restosys.services.SocketListenerService;
-import com.milos.restosys.tasks.MessageSender;
+import com.milos.restosys.utils.Key;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -74,20 +74,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	private void checkForUser(String passcode) {
-		// TODO here check in database for user
-		// for now let it in every time
-		if (passcode.equals("")) {
-			passcode = "Stranger";
-		}
-		Intent billActivity = new Intent(this, BillsActivity.class);
-		billActivity.putExtra("passcode", passcode);
-		startActivity(billActivity);
-		finish();
+		sendToServer(Key.REQUEST_LOGIN + ":@:" + passcode);
+		// TODO play animation here until response arrive
 	}
 
 	public void onClick(View v) {
 		if (v == loginButton) {
 			checkForUser(loginText.getText().toString());
+			loginText.setText("");
 		} else if (v == barcodeButton) {
 			// TODO na ovu akciju se pokrece barcode reader za citanje konobarovog ID-a
 			sendToServer(loginText.getText().toString());

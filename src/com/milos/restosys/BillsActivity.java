@@ -24,7 +24,6 @@ public class BillsActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bills);
 
-		sayHello();
 		initLoginButton();
 		initSettingsButton();
 		initTestNetworkButton();
@@ -58,11 +57,6 @@ public class BillsActivity extends Activity implements OnClickListener {
 			testNetworkButton.setOnClickListener(this);
 		}
 		return testNetworkButton;
-	}
-
-	private void sayHello() {
-		String user = getIntent().getExtras().getString("passcode");
-		Toast.makeText(this, "Hello " + user, Toast.LENGTH_SHORT).show();
 	}
 
 	public void onClick(View v) {
