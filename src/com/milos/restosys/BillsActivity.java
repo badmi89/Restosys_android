@@ -6,14 +6,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MotionEvent;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnTouchListener;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class BillsActivity extends Activity implements OnTouchListener {
+public class BillsActivity extends Activity implements OnClickListener {
 
 	private ImageButton logOffButton;
 	private ImageButton settingsButton;
@@ -35,11 +35,11 @@ public class BillsActivity extends Activity implements OnTouchListener {
 		getMenuInflater().inflate(R.menu.activity_bills, menu);
 		return true;
 	}
-
+	
 	private ImageButton initLoginButton() {
 		if (logOffButton == null) {
 			logOffButton = (ImageButton) findViewById(R.id.powerOffButton);
-			logOffButton.setOnTouchListener(this);
+			logOffButton.setOnClickListener(this);
 		}
 		return logOffButton;
 	}
@@ -47,7 +47,7 @@ public class BillsActivity extends Activity implements OnTouchListener {
 	private ImageButton initSettingsButton() {
 		if (settingsButton == null) {
 			settingsButton = (ImageButton) findViewById(R.id.settingButton);
-			settingsButton.setOnTouchListener(this);
+			settingsButton.setOnClickListener(this);
 		}
 		return settingsButton;
 	}
@@ -55,12 +55,17 @@ public class BillsActivity extends Activity implements OnTouchListener {
 	private Button initTestNetworkButton() {
 		if (testNetworkButton == null) {
 			testNetworkButton = (Button) findViewById(R.id.testNetworkButton);
-			testNetworkButton.setOnTouchListener(this);
+			testNetworkButton.setOnClickListener(this);
 		}
 		return testNetworkButton;
 	}
 
-	public boolean onTouch(View v, MotionEvent event) {
+	private void sayHello() {
+		String user = getIntent().getExtras().getString("passcode");
+		Toast.makeText(this, "Hello " + user, Toast.LENGTH_SHORT).show();
+	}
+
+	public void onClick(View v) {
 		if (v == settingsButton) {
 			Toast.makeText(this, R.string.comming_soon, Toast.LENGTH_LONG)
 					.show();
@@ -75,12 +80,6 @@ public class BillsActivity extends Activity implements OnTouchListener {
 				testNetworkButton.setText("Network unavailable!");
 			}
 		}
-
-		return false;
-	}
-
-	private void sayHello() {
-		String user = getIntent().getExtras().getString("passcode");
-		Toast.makeText(this, "Hello " + user, Toast.LENGTH_SHORT).show();
+		
 	}
 }
