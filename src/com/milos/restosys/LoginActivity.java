@@ -1,5 +1,8 @@
 package com.milos.restosys;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.milos.restosys.preferences.LoginPreferences;
 import com.milos.restosys.services.SocketListenerService;
 import com.milos.restosys.utils.Key;
@@ -74,7 +77,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	private void checkForUser(String passcode) {
-		sendToServer(Key.REQUEST_LOGIN + ":@:" + passcode);
+		JSONObject json = new JSONObject();
+		try {
+			json.put(Key.REQUEST_LOGIN, passcode);
+			sendToServer(json.toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
 		// TODO play animation here until response arrive
 	}
 

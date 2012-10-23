@@ -1,5 +1,15 @@
 package com.milos.restosys;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.milos.restosys.beans.Bill;
+import com.milos.restosys.beans.User;
+
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -18,6 +28,9 @@ public class BillsActivity extends Activity implements OnClickListener {
 	private ImageButton logOffButton;
 	private ImageButton settingsButton;
 	private Button testNetworkButton;
+	
+	private User user;
+	private List<Bill> bills = new ArrayList<Bill>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -27,6 +40,21 @@ public class BillsActivity extends Activity implements OnClickListener {
 		initLoginButton();
 		initSettingsButton();
 		initTestNetworkButton();
+		
+		Bundle infos = getIntent().getExtras();
+		try {
+			user = new User(new JSONObject(infos.getString("user")));
+			JSONArray billsJson = new JSONArray(infos.getString("bills"));
+			bills.clear();
+			for (int i = 0; i < billsJson.length(); i++) {
+				bills.add(new Bill(billsJson.getJSONObject(i)));
+			}
+			Toast.makeText(this, "Welcome " + user.getFirstname() + " " + user.getLastname(), Toast.LENGTH_SHORT).show();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	@Override

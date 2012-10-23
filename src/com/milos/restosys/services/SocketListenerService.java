@@ -7,8 +7,16 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.milos.restosys.BillsActivity;
+import com.milos.restosys.beans.Bill;
+import com.milos.restosys.beans.User;
 import com.milos.restosys.utils.Key;
 
 import android.app.Activity;
@@ -35,7 +43,8 @@ public class SocketListenerService extends Service {
 	private Socket socket;
 	
 	public SharedPreferences prefs;
-
+	private String sessionId;
+	
 	private BroadcastReceiver notifier = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -52,7 +61,14 @@ public class SocketListenerService extends Service {
 				
 				String messageToSend = extras.getString("message-to-server");
 				if (messageToSend != null) {
-					new MessageSender().execute(messageToSend);
+					JSONObject json;
+					try {
+						json = new JSONObject(messageToSend);
+						new MessageSender().execute(json);
+					} catch (JSONException e) {
+						Log.e(TAG, "JSON format not valid");
+						Toast.makeText(context, "JSON format not valid", Toast.LENGTH_LONG).show();
+					}
 				}
 			}
 		}
@@ -64,20 +80,29 @@ public class SocketListenerService extends Service {
 		public void onReceive(Context arg0, Intent arg1) {
 			Bundle extras = arg1.getExtras();
 			if(extras != null) {
-				String command = extras.getString("server-command");
-				String value = extras.getString("server-value");
-				Log.e(TAG, "INSIDE SLAVE: " + command + " " + value);
-				
-				if(command!=null && value!=null) {
-					if(command.equals(Key.SERVER_LOGIN_APPROVE)) {
-						Intent bills = new Intent();
-						bills.setClass(arg0, BillsActivity.class);
-						bills.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						arg0.startActivity(bills);
-						Toast.makeText(arg0, "Welcome " + value, Toast.LENGTH_SHORT).show();
-					} else {
-						Toast.makeText(arg0, value, Toast.LENGTH_LONG).show();
+				try {
+					JSONObject receiver = new JSONObject(extras.getString("received-from-server"));
+					String action = receiver.getString("ACTION");
+					if(action.equals(Key.SERVER_LOGIN_APPROVE)) {
+						sessionId = receiver.getString("SESSIONID");
+						JSONObject user = receiver.getJSONObject("USER");
+						JSONArray billsJson = receiver.getJSONArray("BILLS");
+						
+						Intent billsActivity = new Intent(arg0, BillsActivity.class);
+						billsActivity.putExtra("user", user.toString());
+						billsActivity.putExtra("bills", billsJson.toString());
+						billsActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						
+						startActivity(billsActivity);
+						
 					}
+					
+					if(action.equals(Key.SERVER_LOGIN_REJECTED)) {
+						Toast.makeText(arg0, "User doesn't exist", Toast.LENGTH_LONG).show();
+					}
+					
+				} catch (JSONException e) {
+					Log.e(TAG, "Received invalid JSON format, ignoring...");
 				}
 			}
 		}
@@ -124,7 +149,6 @@ public class SocketListenerService extends Service {
 
 		Toast.makeText(this, "Server Listener started", Toast.LENGTH_SHORT).show();
 		Log.e(TAG, "Server Listener started");
-		sendToServer(Key.HOST_CHECKIN + ":@:NA");
 		super.onCreate();
 	}
 
@@ -132,7 +156,15 @@ public class SocketListenerService extends Service {
 	public void onDestroy() {
 		Toast.makeText(this, "Server Listener stoped", Toast.LENGTH_SHORT).show();
 		Log.e(TAG, "Server listener stoped!");
-		sendToServer(Key.HOST_CHECKOUT + ":@:NA");
+		JSONObject json = new JSONObject();
+		try {
+			if (sessionId==null) sessionId = "";
+			json.put(Key.HOST_CHECKOUT, sessionId);
+			sendToServer(json.toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
 		super.onDestroy();
 	}
 
@@ -151,31 +183,24 @@ public class SocketListenerService extends Service {
 	}
 	
 	public void sendToSlave(String message) {
-		String command = message.split(":@:")[0];
-		String value = message.split(":@:")[1];
-		
-		Log.e(TAG, "MESSAGE: " + message);
-		Log.e(TAG, "COMMAND: " + command);
-		Log.e(TAG, "VALUE: " + value);
 		
 		Intent broadcast = new Intent("slave-broadcast");
-		broadcast.putExtra("server-command", command);
-		broadcast.putExtra("server-value", value);
+		broadcast.putExtra("received-from-server", message);
 		LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(broadcast);
 		Log.e(TAG, "Broadcast sent to slave: " + message);
 	}
 	
 
-	public class MessageSender extends AsyncTask<String, Void, Socket> {
+	public class MessageSender extends AsyncTask<JSONObject, Void, Socket> {
 
 		private String serverIp = prefs.getString("server_ip", "192.168.1.1");
 		private int serverPort = Integer.parseInt(prefs.getString("server_port", "3434"));
-
-		private void send(String message) {
+		
+		private void send(JSONObject json) {
 			try {
 				Socket socket = new Socket(serverIp, serverPort);
 				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-				out.writeBytes(message + "\n");
+				out.writeBytes(json.toString() + "\n");
 				out.close();
 				socket.close();
 			} catch (UnknownHostException e) {
@@ -186,7 +211,7 @@ public class SocketListenerService extends Service {
 		}
 
 		@Override
-		protected Socket doInBackground(String... params) {
+		protected Socket doInBackground(JSONObject... params) {
 			try {
 				for (int i = 0; i < params.length; i++) {
 					send(params[i]);
