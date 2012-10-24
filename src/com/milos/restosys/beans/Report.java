@@ -14,8 +14,8 @@ public class Report {
 	
 	private String waiterID;
 	private String waiterName;
-	private Date date;
-	private Date time;
+	private String date;
+	private String time;
 	private double total;
 	private List<Article> articles;
 	
@@ -26,8 +26,8 @@ public class Report {
 			waiterID = json.getString("waiter-id");
 			waiterName = json.getString("waiter-name");
 			total = json.getDouble("total");
-			date = new SimpleDateFormat("dd.MM.yyyy").parse(json.getString("date"));
-			time = new SimpleDateFormat("HH.mm").parse(json.getString("time"));
+			date = json.getString("date");
+			time = json.getString("time");
 			
 			JSONArray arts = json.getJSONArray("articles");
 			articles = new ArrayList<Article>();
@@ -35,8 +35,6 @@ public class Report {
 				articles.add(new Article(arts.getJSONObject(i)));
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
@@ -53,10 +51,10 @@ public class Report {
 	public void setWaiterName(String waiterName) {
 		this.waiterName = waiterName;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	public double getTotal() {
@@ -72,11 +70,11 @@ public class Report {
 		this.articles = articles;
 	}
 
-	public Date getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(Date time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 	

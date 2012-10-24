@@ -11,23 +11,22 @@ import com.milos.restosys.beans.Bill;
 import com.milos.restosys.beans.User;
 
 import android.app.Activity;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class BillsActivity extends Activity implements OnClickListener {
 
 	private ImageButton logOffButton;
 	private ImageButton settingsButton;
-	private Button testNetworkButton;
+	private LinearLayout billsContainer;
 	
 	private User user;
 	private List<Bill> bills = new ArrayList<Bill>();
@@ -39,7 +38,7 @@ public class BillsActivity extends Activity implements OnClickListener {
 
 		initLoginButton();
 		initSettingsButton();
-		initTestNetworkButton();
+		billsContainer = (LinearLayout) findViewById(R.id.billsContainer);
 		
 		Bundle infos = getIntent().getExtras();
 		try {
@@ -47,7 +46,11 @@ public class BillsActivity extends Activity implements OnClickListener {
 			JSONArray billsJson = new JSONArray(infos.getString("bills"));
 			bills.clear();
 			for (int i = 0; i < billsJson.length(); i++) {
-				bills.add(new Bill(billsJson.getJSONObject(i)));
+				Bill bill = new Bill(billsJson.getJSONObject(i));
+				bills.add(bill);
+				CheckBox billCheckBox = new CheckBox(this);
+				billCheckBox.setText("Table (" + bill.getTotal() + ")");
+				billsContainer.addView(billCheckBox);
 			}
 			Toast.makeText(this, "Welcome " + user.getFirstname() + " " + user.getLastname(), Toast.LENGTH_SHORT).show();
 		} catch (JSONException e) {
@@ -79,29 +82,15 @@ public class BillsActivity extends Activity implements OnClickListener {
 		return settingsButton;
 	}
 
-	private Button initTestNetworkButton() {
-		if (testNetworkButton == null) {
-			testNetworkButton = (Button) findViewById(R.id.testNetworkButton);
-			testNetworkButton.setOnClickListener(this);
-		}
-		return testNetworkButton;
-	}
-
 	public void onClick(View v) {
 		if (v == settingsButton) {
-			Toast.makeText(this, R.string.comming_soon, Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(this, R.string.comming_soon, Toast.LENGTH_LONG).show();
 		} else if (v == logOffButton) {
 			finish();
-		} else if (v == testNetworkButton) {
-			ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-			if (networkInfo != null && networkInfo.isConnected()) {
-				testNetworkButton.setText("Connected!");
-			} else {
-				testNetworkButton.setText("Network unavailable!");
-			}
 		}
 		
 	}
+
+
+
 }

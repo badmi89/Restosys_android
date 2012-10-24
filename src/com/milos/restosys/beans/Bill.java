@@ -14,8 +14,8 @@ public class Bill {
 	private String userId;
 	private int printed;
 	private double total;
-	private Date date;
-	private Date time;
+	private String date;
+	private String time;
 	
 	public Bill() {}
 	
@@ -25,11 +25,9 @@ public class Bill {
 			userId = json.getString("user-id");
 			printed = json.getInt("printed");
 			total = json.getDouble("total");
-			date = new SimpleDateFormat("dd.MM.yyyy").parse(json.getString("date"));
-			time = new SimpleDateFormat("HH.mm").parse(json.getString("time"));
+			date = json.getString("date");
+			time = json.getString("time");
 		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
@@ -58,16 +56,16 @@ public class Bill {
 	public void setTotal(double total) {
 		this.total = total;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
-	public Date getTime() {
+	public String getTime() {
 		return time;
 	}
-	public void setTime(Date time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 	

@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@+id/button2"
+        android:layout_toRightOf="@+id/printButton"
         android:text="@string/createNewBill" />
 
     <TextView
@@ -41,43 +42,6 @@
         android:contentDescription="@string/settingsIcon"
         android:src="@drawable/settings" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/button1"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/settingButton"
-        android:orientation="vertical" >
-
-        <CheckBox
-            android:id="@+id/checkBox1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Table 5 (41.50)" />
-
-        <CheckBox
-            android:id="@+id/checkBox2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Table 8 (12.00)" />
-
-        <Button
-            android:id="@+id/testNetworkButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Test Network" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/printButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/linearLayout1"
-        android:text="@string/printButton" />
-
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
@@ -85,5 +49,31 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="@string/deleteButton" />
+
+    <Button
+        android:id="@+id/printButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/printButton" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/settingButton" >
+
+        <LinearLayout
+            android:id="@+id/billsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+     
+    </ScrollView>
 
 </RelativeLayout>

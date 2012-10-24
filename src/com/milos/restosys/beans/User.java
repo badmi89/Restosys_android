@@ -16,8 +16,8 @@ public class User {
 	private String role;
 	private int inshift;
 	private int visible;
-	private Date dateStart;
-	private Date dateEnd;
+	private String dateStart;
+	private String dateEnd;
 	
 	public User() {}
 	
@@ -30,13 +30,11 @@ public class User {
 			role = json.getString("role");
 			inshift = json.getInt("inshift");
 			visible = json.getInt("visible");
-			dateStart = new SimpleDateFormat("dd.MM.yyyy").parse(json.getString("date-start"));
-			dateEnd = new SimpleDateFormat("dd.MM.yyyy").parse(json.getString("date-end"));
+			dateStart = json.getString("date-start");
+			dateEnd = json.getString("date-end");
 		} catch (JSONException e) {
 			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 	
 	public String getId() {
@@ -81,16 +79,16 @@ public class User {
 	public void setVisible(int visible) {
 		this.visible = visible;
 	}
-	public Date getDateStart() {
+	public String getDateStart() {
 		return dateStart;
 	}
-	public void setDateStart(Date dateStart) {
+	public void setDateStart(String dateStart) {
 		this.dateStart = dateStart;
 	}
-	public Date getDateEnd() {
+	public String getDateEnd() {
 		return dateEnd;
 	}
-	public void setDateEnd(Date dateEnd) {
+	public void setDateEnd(String dateEnd) {
 		this.dateEnd = dateEnd;
 	}
 	
